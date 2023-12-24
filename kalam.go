@@ -1,11 +1,8 @@
 package kalam
 
 import (
-	"errors"
-	"fmt"
 	"regexp"
 	"strings"
-	"unicode"
 )
 
 const (
@@ -74,7 +71,7 @@ var GrammaticalTags = []string{
 	"بدل",
 }
 
-// This is preferred over unicode.IsSpace since we have our own whitespace rules
+// IsWhitespace is preferred over unicode.IsSpace since we have our own whitespace rules
 func IsWhitespace(letter rune) bool {
 	return letter == ' '
 }
@@ -111,25 +108,24 @@ func IsShadda(letter rune) bool {
 	return string(letter) == Shadda
 }
 
-// TODO(Amr Ojjeh): Rewrite clean content into two functions:
-// one that cleans content and another that checks if the content is clean.
-// It currently does both
-
-// CleanContent cleans a string, ensuring that there are no double spaces
-// and that all characters are either Arabic letter, an accepted whitespace,
-// or an accepted punctuation. All tashkeel would be deleted.
-func CleanContent(content string) (string, error) {
-	for _, c := range content {
-		if !(IsArabicLetter(c) || IsWhitespace(c) || IsPunctuation(c)) {
-			return "", errors.New(fmt.Sprintf("kalam: %v is an invalid letter", c))
-		}
-	}
-
+// RemoveExtraWhitespace removes unnecessary whitespace, ensuring that there
+// are no double spaces and no beginning/ending whitespace.
+func RemoveExtraWhitespace(content string) string {
 	// Remove double spaces
 	r, _ := regexp.Compile(" +")
 	content = r.ReplaceAllString(content, " ")
 
-	// Trim sentence
-	content = strings.TrimFunc(content, unicode.IsSpace)
-	return content, nil
+	content = strings.TrimSpace(content)
+	return content
+}
+
+// IsContentClean ensures that all characters conform to Kalam's character
+// set
+func IsContentClean(content string) bool {
+	for _, c := range content {
+		if !(IsArabicLetter(c) || IsWhitespace(c) || IsPunctuation(c)) {
+			return false
+		}
+	}
+	return true
 }
