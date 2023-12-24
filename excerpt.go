@@ -1,6 +1,9 @@
 package kalam
 
-import "fmt"
+import (
+	"fmt"
+	"strings"
+)
 
 type Excerpt struct {
 	Name      string
@@ -29,19 +32,58 @@ type LetterPack struct {
 	Shadda bool
 }
 
+func (e Excerpt) String() string {
+	res := ""
+	for _, s := range e.Sentences {
+		res += s.String()
+	}
+	return res
+}
+
+func (e Excerpt) Unpointed(showShadda bool) string {
+	res := ""
+	for _, s := range e.Sentences {
+		res += s.Unpointed(showShadda)
+	}
+	return res
+}
+
+func (s Sentence) String() string {
+	res := ""
+	for _, w := range s.Words {
+		res += w.String()
+		if !w.Preceding {
+			res += " "
+		}
+	}
+	return strings.TrimSpace(res)
+}
+
+func (s Sentence) Unpointed(showShadda bool) string {
+	res := ""
+	for _, w := range s.Words {
+		res += w.Unpointed(showShadda)
+		if !w.Preceding {
+			res += " "
+		}
+	}
+	return res
+}
+
 func (w Word) String() string {
 	return w.PointedWord
 }
 
 // UnpointedString returns the word without any vowels. The shadda is shown
 // if showShadda is true.
-func (w Word) UnpointedString(showShadda bool) string {
+func (w Word) Unpointed(showShadda bool) string {
 	res := ""
 	for _, l := range w.PointedWord {
 		c := string(l)
-		if c != Sukoon && c != Damma && c != Fatha && c != Kasra &&
-			c != Dammatan && c != Fathatan && c != Kasratan {
-			res += c
+		if !IsShortVowel(l) {
+			if (showShadda && l == Shadda) || l != Shadda {
+				res += c
+			}
 		}
 	}
 	return res
@@ -55,7 +97,7 @@ func (w Word) IsValid() bool {
 	v := false
 	s := false
 	for _, c := range w.PointedWord {
-		switch string(c) {
+		switch c {
 		case Shadda:
 			if l == false || s == true {
 				return false
@@ -84,7 +126,7 @@ func (w Word) LetterPacks() []LetterPack {
 	letters := []LetterPack{}
 	letter := LetterPack{}
 	for _, l := range w.PointedWord {
-		switch string(l) {
+		switch l {
 		case Shadda:
 			letter.Shadda = true
 		case Sukoon, Damma, Fatha, Kasra, Dammatan, Fathatan, Kasratan:
@@ -100,11 +142,9 @@ func (w Word) LetterPacks() []LetterPack {
 	return letters
 }
 
-// TODO(Amr Ojjeh): Write Sentence.String and Excerpt.String
-
 func (l LetterPack) String() string {
 	if l.Shadda {
-		return fmt.Sprintf("%c%c%s", l.Letter, l.Vowel, Shadda)
+		return fmt.Sprintf("%c%c%c", l.Letter, l.Vowel, Shadda)
 	}
 	return fmt.Sprintf("%c%c", l.Letter, l.Vowel)
 }

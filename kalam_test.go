@@ -1,8 +1,10 @@
 package kalam
 
 import (
-	"github.com/amrojjeh/kalam/assert"
+	"fmt"
 	"testing"
+
+	"github.com/amrojjeh/kalam/assert"
 )
 
 func TestRemoveExtraWhitespace(t *testing.T) {
@@ -68,4 +70,9 @@ func TestIsContentClean(t *testing.T) {
 			assert.Equal(t, IsContentClean(test.content), test.expected)
 		})
 	}
+}
+
+func TestBuckWalter(t *testing.T) {
+	assert.Equal(t, Buckwalter("h*A byt."), fmt.Sprintf("%c%c%c %c%c%c.",
+		Heh, Thal, Alef, Beh, Yeh, Teh))
 }

@@ -5,22 +5,6 @@ import (
 	"strings"
 )
 
-const (
-	Shadda = string(rune(0x0651))
-
-	Sukoon   = string(rune(0x0652))
-	Damma    = string(rune(0x064F))
-	Fatha    = string(rune(0x064E))
-	Kasra    = string(rune(0x0650))
-	Dammatan = string(rune(0x064C))
-	Fathatan = string(rune(0x064B))
-	Kasratan = string(rune(0x064D))
-
-	Placeholder = string(rune(0x25CC))
-
-	SuperscriptAlef = string(rune(0x670))
-)
-
 var GrammaticalTags = []string{
 	"اسم مرفوع",
 	"اسم منصوب",
@@ -76,36 +60,26 @@ func IsWhitespace(letter rune) bool {
 	return letter == ' '
 }
 
-var Punctuation = regexp.MustCompile("[\\.:«»،\"—]")
-
 func IsPunctuation(letter rune) bool {
-	return Punctuation.MatchString(string(letter))
+	return punctuation[letter]
 }
 
 // IsArabicLetter checks if a letter is part of the classical Arabic script.
 // It returns false for tashkeel
 func IsArabicLetter(letter rune) bool {
-	if letter >= 0x0621 && letter <= 0x063A {
-		return true
-	}
-	if letter >= 0x0641 && letter <= 0x064A {
-		return true
-	}
-	return false
+	return letters[letter]
 }
 
 // IsVowel checks if the character is a fatha, kasra, damma, or sukoon, with
 // their tanween variations. It returns false for shadda and long vowels like
 // the alef.
-func IsVowel(letter rune) bool {
-	sl := string(letter)
-	return sl == Sukoon || sl == Damma || sl == Fatha || sl == Kasra ||
-		sl == Dammatan || sl == Fathatan || sl == Kasratan
+func IsShortVowel(letter rune) bool {
+	return vowels[letter]
 }
 
 // IsShadda checks if the character is a shadda.
 func IsShadda(letter rune) bool {
-	return string(letter) == Shadda
+	return letter == Shadda
 }
 
 // RemoveExtraWhitespace removes unnecessary whitespace, ensuring that there
@@ -128,4 +102,17 @@ func IsContentClean(content string) bool {
 		}
 	}
 	return true
+}
+
+func Buckwalter(sen string) string {
+	res := ""
+	for _, l := range sen {
+		b, ok := buckwalter[l]
+		if ok {
+			res += string(b)
+		} else {
+			res += string(l)
+		}
+	}
+	return res
 }
