@@ -7,6 +7,15 @@ import (
 	"github.com/amrojjeh/kalam/assert"
 )
 
+func TestPunctuationRegex(t *testing.T) {
+	reg, err := PunctuationRegex()
+	if err != nil {
+		t.Fatal(err)
+	}
+	assert.Equal(t, reg.MatchString(string(ArabicComma)), true)
+	assert.Equal(t, reg.MatchString(string("!")), false)
+}
+
 func TestRemoveExtraWhitespace(t *testing.T) {
 	tests := []struct {
 		name     string

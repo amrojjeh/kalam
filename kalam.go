@@ -60,6 +60,19 @@ func IsWhitespace(letter rune) bool {
 	return letter == ' '
 }
 
+func PunctuationRegex() (*regexp.Regexp, error) {
+	str := ""
+	for key := range punctuation {
+		str += string(key)
+	}
+	e, err := regexp.Compile("[" + str + "]")
+	if err != nil {
+		return nil, err
+	}
+	return e, nil
+}
+
+// IsPunctuation cheks if a latter is part of the accepted punctuation
 func IsPunctuation(letter rune) bool {
 	return punctuation[letter]
 }
