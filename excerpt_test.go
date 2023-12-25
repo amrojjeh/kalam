@@ -14,14 +14,14 @@ func TestExcerptString(t *testing.T) {
 			{
 				Words: []Word{
 					{
-						PointedWord: Buckwalter("ha*aAo"),
+						PointedWord: FromBuckwalter("ha*aAo"),
 						Tags:        []string{},
 						Punctuation: false,
 						Ignore:      true,
 						Preceding:   false,
 					},
 					{
-						PointedWord: Buckwalter("bayotN"),
+						PointedWord: FromBuckwalter("bayotN"),
 						Tags:        []string{},
 						Punctuation: false,
 						Ignore:      false,
@@ -39,7 +39,7 @@ func TestExcerptString(t *testing.T) {
 		},
 	}
 
-	assert.Equal(t, e.String(), Buckwalter("ha*aAo bayotN."))
+	assert.Equal(t, e.String(), FromBuckwalter("ha*aAo bayotN."))
 }
 
 func TestLetterPackString(t *testing.T) {
