@@ -42,6 +42,24 @@ func TestExcerptString(t *testing.T) {
 	assert.Equal(t, e.String(), FromBuckwalter("ha*aAo bayotN."))
 }
 
+func TestWordBase(t *testing.T) {
+	w := Word{
+		PointedWord: FromBuckwalter("bayotN"),
+	}
+
+	assert.Equal(t, w.Base().PointedWord, FromBuckwalter("bayo"))
+}
+
+func TestWordTermination(t *testing.T) {
+	w := Word{
+		PointedWord: FromBuckwalter("bayotN"),
+	}
+
+	assert.Equal(t, w.Termination().Letter, Teh)
+	assert.Equal(t, w.Termination().Shadda, false)
+	assert.Equal(t, w.Termination().Vowel, Dammatan)
+}
+
 func TestLetterPackString(t *testing.T) {
 	l := LetterPack{
 		Letter: Yeh,

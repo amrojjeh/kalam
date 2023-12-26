@@ -89,6 +89,23 @@ func (w Word) Unpointed(showShadda bool) string {
 	return res
 }
 
+// Base returns a new word which does not have the last letter of w
+func (w Word) Base() Word {
+	res := ""
+	letters := w.LetterPacks()
+	for _, l := range letters[0 : len(letters)-1] {
+		res += l.String()
+	}
+	w.PointedWord = res
+	return w
+}
+
+// Termination returns the last letter of w
+func (w Word) Termination() LetterPack {
+	letters := w.LetterPacks()
+	return letters[len(letters)-1]
+}
+
 // IsValid checks if every Arabic letter in w has a vowel, and that each letter
 // only has one vowel and only one optional shadda
 // IsValid makes a call to IsContentClean
@@ -139,6 +156,7 @@ func (w Word) LetterPacks() []LetterPack {
 			letter.Letter = l
 		}
 	}
+	letters = append(letters, letter)
 	return letters
 }
 
