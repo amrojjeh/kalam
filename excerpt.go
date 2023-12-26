@@ -32,6 +32,13 @@ type LetterPack struct {
 	Shadda bool
 }
 
+type ExcerptIterator struct {
+	Excerpt   Excerpt
+	SentenceI int
+	WordI     int
+	Index     int
+}
+
 func (e Excerpt) String() string {
 	res := ""
 	for _, s := range e.Sentences {
@@ -46,6 +53,18 @@ func (e Excerpt) Unpointed(showShadda bool) string {
 		res += s.Unpointed(showShadda)
 	}
 	return res
+}
+
+// Iterator returns an ExcerptIterator which points to the first quizzable word
+func (e Excerpt) Iterator() (ExcerptIterator, bool) {
+	i := ExcerptIterator{Excerpt: e}
+	if !i.Word().Ignore && !i.Word().Punctuation {
+		return i, true
+	} else {
+		i, f := i.Next()
+		i.Index = 0
+		return i, f
+	}
 }
 
 func (s Sentence) String() string {
@@ -165,4 +184,32 @@ func (l LetterPack) String() string {
 		return fmt.Sprintf("%c%c%c", l.Letter, l.Vowel, Shadda)
 	}
 	return fmt.Sprintf("%c%c", l.Letter, l.Vowel)
+}
+
+// Next returns the next quizzable word. If there are no more words, it returns true
+func (i ExcerptIterator) Next() (ExcerptIterator, bool) {
+	for is, s := range i.Excerpt.Sentences[i.SentenceI:] {
+		for iw, w := range s.Words[i.WordI:] {
+			if iw == 0 {
+				continue
+			}
+			if !w.Ignore && !w.Punctuation {
+				return ExcerptIterator{
+					Excerpt:   i.Excerpt,
+					SentenceI: i.SentenceI + is,
+					WordI:     i.WordI + iw,
+					Index:     i.WordI + 1,
+				}, true
+			}
+		}
+	}
+	return i, false
+}
+
+func (i ExcerptIterator) Sentence() Sentence {
+	return i.Excerpt.Sentences[i.SentenceI]
+}
+
+func (i ExcerptIterator) Word() Word {
+	return i.Sentence().Words[i.WordI]
 }

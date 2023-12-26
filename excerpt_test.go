@@ -7,8 +7,8 @@ import (
 	"github.com/amrojjeh/kalam/assert"
 )
 
-func TestExcerptString(t *testing.T) {
-	e := Excerpt{
+func FactoryExcerpt() Excerpt {
+	return Excerpt{
 		Name: "Test",
 		Sentences: []Sentence{
 			{
@@ -38,7 +38,10 @@ func TestExcerptString(t *testing.T) {
 			},
 		},
 	}
+}
 
+func TestExcerptString(t *testing.T) {
+	e := FactoryExcerpt()
 	assert.Equal(t, e.String(), FromBuckwalter("ha*aAo bayotN."))
 }
 
@@ -68,4 +71,12 @@ func TestLetterPackString(t *testing.T) {
 	}
 
 	assert.Equal(t, l.String(), fmt.Sprintf("%c%c%c", Yeh, Fatha, Shadda))
+}
+
+func TestExcerptIterator(t *testing.T) {
+	e := FactoryExcerpt()
+	i, found := e.Iterator()
+	assert.Equal(t, found, true)
+	assert.Equal(t, i.Word().PointedWord, FromBuckwalter("bayotN"))
+	assert.Equal(t, i.Index, 0)
 }
