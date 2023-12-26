@@ -36,13 +36,38 @@ func FactoryExcerpt() Excerpt {
 					},
 				},
 			},
+			{
+				Words: []Word{
+					{
+						PointedWord: FromBuckwalter("ha*ihi"),
+						Tags:        []string{},
+						Punctuation: false,
+						Ignore:      true,
+						Preceding:   false,
+					},
+					{
+						PointedWord: FromBuckwalter("musolimapN"),
+						Tags:        []string{},
+						Punctuation: false,
+						Ignore:      false,
+						Preceding:   true,
+					},
+					{
+						PointedWord: ".",
+						Tags:        []string{},
+						Punctuation: true,
+						Ignore:      true,
+						Preceding:   false,
+					},
+				},
+			},
 		},
 	}
 }
 
 func TestExcerptString(t *testing.T) {
 	e := FactoryExcerpt()
-	assert.Equal(t, e.String(), FromBuckwalter("ha*aAo bayotN."))
+	assert.Equal(t, e.String(), FromBuckwalter("ha*aAo bayotN. ha*ihi musolimapN."))
 }
 
 func TestWordBase(t *testing.T) {
@@ -79,4 +104,12 @@ func TestExcerptIterator(t *testing.T) {
 	assert.Equal(t, found, true)
 	assert.Equal(t, i.Word().PointedWord, FromBuckwalter("bayotN"))
 	assert.Equal(t, i.Index, 0)
+	i, found = i.Next()
+	assert.Equal(t, found, true)
+	assert.Equal(t, i.Word().PointedWord, FromBuckwalter("musolimapN"))
+	assert.Equal(t, i.Index, 1)
+	i, found = i.Next()
+	assert.Equal(t, found, false)
+	assert.Equal(t, i.Word().PointedWord, FromBuckwalter("musolimapN"))
+	assert.Equal(t, i.Index, 1)
 }
