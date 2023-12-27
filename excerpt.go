@@ -179,11 +179,23 @@ func (w Word) LetterPacks() []LetterPack {
 	return letters
 }
 
+func (w Word) Quizzable() bool {
+	return !w.Punctuation && !w.Ignore
+}
+
 func (l LetterPack) String() string {
 	if l.Shadda {
 		return fmt.Sprintf("%c%c%c", l.Letter, l.Vowel, Shadda)
 	}
 	return fmt.Sprintf("%c%c", l.Letter, l.Vowel)
+}
+
+func (l LetterPack) Unpointed(showShadda bool) string {
+	if !l.Shadda || !showShadda {
+		return string(l.Letter)
+	}
+
+	return string(l.Letter) + string(Shadda)
 }
 
 // Next returns the next quizzable word. If there are no more words, it returns true
