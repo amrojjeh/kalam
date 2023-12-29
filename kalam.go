@@ -90,6 +90,12 @@ func IsShortVowel(letter rune) bool {
 	return vowels[letter]
 }
 
+func IsTanween(letter rune) bool {
+	return letter == Fathatan ||
+		letter == Dammatan ||
+		letter == Kasratan
+}
+
 // IsShadda checks if the character is a shadda.
 func IsShadda(letter rune) bool {
 	return letter == Shadda
