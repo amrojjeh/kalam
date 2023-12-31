@@ -226,7 +226,7 @@ func (i ExcerptIterator) nextWord() (ExcerptIterator, bool) {
 				Excerpt:   i.Excerpt,
 				SentenceI: i.SentenceI,
 				WordI:     i.WordI + wi,
-				Index:     i.WordI + 1,
+				Index:     i.Index + 1,
 			}, true
 		}
 	}
