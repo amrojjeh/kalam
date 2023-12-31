@@ -198,6 +198,25 @@ func (l LetterPack) Unpointed(showShadda bool) string {
 	return string(l.Letter) + string(Shadda)
 }
 
+func LetterPackFromString(str string) LetterPack {
+	letter := LetterPack{}
+	for _, l := range str {
+		switch l {
+		case Shadda:
+			letter.Shadda = true
+		case Sukoon, Damma, Fatha, Kasra, Dammatan, Fathatan, Kasratan:
+			letter.Vowel = l
+		default:
+			letter.Letter = l
+		}
+	}
+	return letter
+}
+
+func (l LetterPack) EqualTo(o LetterPack) bool {
+	return l.Shadda == o.Shadda && l.Letter == o.Letter && l.Vowel == o.Vowel
+}
+
 // Next returns the next quizzable word. If there are no more words, it returns true
 func (i ExcerptIterator) Next() (ExcerptIterator, bool) {
 	i, found := i.nextWord()
