@@ -58,7 +58,7 @@ func (e Excerpt) Unpointed(showShadda bool) string {
 // Iterator returns an ExcerptIterator which points to the first quizzable word
 func (e Excerpt) Iterator() (ExcerptIterator, bool) {
 	i := ExcerptIterator{Excerpt: e}
-	if !i.Word().Ignore && !i.Word().Punctuation {
+	if i.Word().Quizzable() {
 		return i, true
 	} else {
 		i, f := i.Next()
@@ -227,6 +227,9 @@ func (i ExcerptIterator) Next() (ExcerptIterator, bool) {
 	for i.SentenceI < len(i.Excerpt.Sentences)-1 {
 		i.SentenceI += 1
 		i.WordI = 0
+		if i.Word().Quizzable() {
+			return i, true
+		}
 		i, found = i.nextWord()
 		if found {
 			return i, true
@@ -240,7 +243,7 @@ func (i ExcerptIterator) nextWord() (ExcerptIterator, bool) {
 		if wi == 0 {
 			continue
 		}
-		if !w.Ignore && !w.Punctuation {
+		if w.Quizzable() {
 			return ExcerptIterator{
 				Excerpt:   i.Excerpt,
 				SentenceI: i.SentenceI,

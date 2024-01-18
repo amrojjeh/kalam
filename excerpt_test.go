@@ -118,4 +118,61 @@ func TestExcerptIterator(t *testing.T) {
 	assert.Equal(t, i.Index, 1)
 	assert.Equal(t, i.WordI, 1)
 	assert.Equal(t, i.SentenceI, 1)
+
+	e = Excerpt{
+		Name: "Test",
+		Sentences: []Sentence{
+			{
+				Words: []Word{
+					{
+						PointedWord: "يَنْكِحُ",
+						Tags:        []string{},
+						Punctuation: false,
+						Ignore:      false,
+						Preceding:   true,
+					},
+					{
+						PointedWord: "هَاْ",
+						Tags:        []string{},
+						Punctuation: false,
+						Ignore:      true,
+						Preceding:   true,
+					},
+					{
+						PointedWord: "،",
+						Tags:        []string{},
+						Punctuation: true,
+						Ignore:      false, // should this be true?
+						Preceding:   false,
+					},
+				},
+			},
+			{
+				Words: []Word{
+					{
+						PointedWord: "فَهِجْرَتُ",
+						Tags:        []string{},
+						Punctuation: false,
+						Ignore:      false,
+						Preceding:   true,
+					},
+					{
+						PointedWord: "هُ",
+						Tags:        []string{},
+						Punctuation: false,
+						Ignore:      false,
+						Preceding:   false,
+					},
+				},
+			},
+		},
+	}
+
+	i, found = e.Iterator()
+	assert.Equal(t, found, true)
+	assert.Equal(t, i.Word().String(), "يَنْكِحُ")
+
+	i, found = i.Next()
+	assert.Equal(t, i.Word().String(), "فَهِجْرَتُ")
+	assert.Equal(t, found, true)
 }
