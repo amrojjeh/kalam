@@ -228,6 +228,7 @@ func (i ExcerptIterator) Next() (ExcerptIterator, bool) {
 		i.SentenceI += 1
 		i.WordI = 0
 		if i.Word().Quizzable() {
+			i.Index += 1
 			return i, true
 		}
 		i, found = i.nextWord()

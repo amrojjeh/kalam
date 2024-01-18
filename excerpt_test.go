@@ -171,8 +171,10 @@ func TestExcerptIterator(t *testing.T) {
 	i, found = e.Iterator()
 	assert.Equal(t, found, true)
 	assert.Equal(t, i.Word().String(), "يَنْكِحُ")
+	assert.Equal(t, i.Index, 0)
 
 	i, found = i.Next()
 	assert.Equal(t, i.Word().String(), "فَهِجْرَتُ")
 	assert.Equal(t, found, true)
+	assert.Equal(t, i.Index, 1)
 }
