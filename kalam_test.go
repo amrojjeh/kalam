@@ -8,10 +8,7 @@ import (
 )
 
 func TestPunctuationRegex(t *testing.T) {
-	reg, err := PunctuationRegex()
-	if err != nil {
-		t.Fatal(err)
-	}
+	reg := PunctuationRegex()
 	assert.Equal(t, reg.MatchString(string(ArabicComma)), true)
 	assert.Equal(t, reg.MatchString(string("!")), false)
 }

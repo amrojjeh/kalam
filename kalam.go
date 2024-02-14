@@ -60,16 +60,13 @@ func IsWhitespace(letter rune) bool {
 	return letter == ' '
 }
 
-func PunctuationRegex() (*regexp.Regexp, error) {
+func PunctuationRegex() *regexp.Regexp {
 	str := ""
 	for key := range punctuation {
 		str += string(key)
 	}
-	e, err := regexp.Compile("[" + str + "]")
-	if err != nil {
-		return nil, err
-	}
-	return e, nil
+	e := regexp.MustCompile("[" + str + "]")
+	return e
 }
 
 // IsPunctuation cheks if a latter is part of the accepted punctuation
