@@ -27,9 +27,10 @@ type Word struct {
 }
 
 type LetterPack struct {
-	Letter rune
-	Vowel  rune
-	Shadda bool
+	Letter          rune
+	Vowel           rune
+	Shadda          bool
+	SuperscriptAlef bool
 }
 
 type ExcerptIterator struct {
@@ -111,7 +112,7 @@ func (w Word) Unpointed(showShadda bool) string {
 // Base returns a new word which does not have the last letter of w
 func (w Word) Base() Word {
 	res := ""
-	letters := w.LetterPacks()
+	letters := LetterPacks(w.PointedWord)
 	for _, l := range letters[0 : len(letters)-1] {
 		res += l.String()
 	}
@@ -121,30 +122,35 @@ func (w Word) Base() Word {
 
 // Termination returns the last letter of w
 func (w Word) Termination() LetterPack {
-	letters := w.LetterPacks()
+	letters := LetterPacks(w.PointedWord)
 	return letters[len(letters)-1]
 }
 
-// IsValid checks if every Arabic letter in w has a vowel, and that each letter
+// IsValid checks if every Arabic letter in pointedWord has a vowel, and that each letter
 // only has one vowel and only one optional shadda
 // IsValid makes a call to IsContentClean
-func (w Word) IsValid() bool {
+func IsValid(pointedWord string) bool {
 	l := false
 	v := false
 	s := false
-	for _, c := range w.PointedWord {
-		switch c {
-		case Shadda:
+	superscript := false
+	for _, c := range pointedWord {
+		if c == Shadda {
 			if l == false || s == true {
 				return false
 			}
 			s = true
-		case Sukoon, Damma, Fatha, Kasra, Dammatan, Fathatan, Kasratan:
+		} else if c == SuperscriptAlef {
+			if l == false || superscript {
+				return false
+			}
+			superscript = true
+		} else if vowels[c] {
 			if l == false || v == true {
 				return false
 			}
 			v = true
-		default:
+		} else {
 			if l == true && v == false {
 				return false
 			}
@@ -153,21 +159,22 @@ func (w Word) IsValid() bool {
 			s = false
 		}
 	}
-	return IsContentClean(w.PointedWord)
+	return IsContentClean(pointedWord)
 }
 
-// LetterPacks breaks down each letter from w into a LetterPack struct
-// LetterPacks assumes w is valid
-func (w Word) LetterPacks() []LetterPack {
+// LetterPacks breaks down each letter from pointedWord into a LetterPack struct
+// LetterPacks assumes pointedWord is valid
+func LetterPacks(pointedWord string) []LetterPack {
 	letters := []LetterPack{}
 	letter := LetterPack{}
-	for _, l := range w.PointedWord {
-		switch l {
-		case Shadda:
+	for _, l := range pointedWord {
+		if l == Shadda {
 			letter.Shadda = true
-		case Sukoon, Damma, Fatha, Kasra, Dammatan, Fathatan, Kasratan:
+		} else if l == SuperscriptAlef {
+			letter.SuperscriptAlef = true
+		} else if vowels[l] {
 			letter.Vowel = l
-		default:
+		} else {
 			if letter.Letter != 0 {
 				letters = append(letters, letter)
 				letter = LetterPack{}
