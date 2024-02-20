@@ -179,7 +179,9 @@ func LetterPacks(pointedWord string) []LetterPack {
 		} else {
 			if letter.Letter != 0 {
 				letters = append(letters, letter)
-				letter = LetterPack{}
+				letter = LetterPack{
+					Vowel: Sukoon,
+				}
 			}
 			letter.Letter = l
 		}
