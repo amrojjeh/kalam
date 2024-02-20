@@ -166,7 +166,9 @@ func IsValid(pointedWord string) bool {
 // LetterPacks assumes pointedWord is valid
 func LetterPacks(pointedWord string) []LetterPack {
 	letters := []LetterPack{}
-	letter := LetterPack{}
+	letter := LetterPack{
+		Vowel: Sukoon,
+	}
 	for _, l := range pointedWord {
 		if l == Shadda {
 			letter.Shadda = true
@@ -176,9 +178,6 @@ func LetterPacks(pointedWord string) []LetterPack {
 			letter.Vowel = l
 		} else {
 			if letter.Letter != 0 {
-				if letter.Vowel == 0 {
-					letter.Vowel = Sukoon
-				}
 				letters = append(letters, letter)
 				letter = LetterPack{}
 			}
