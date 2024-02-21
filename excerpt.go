@@ -190,6 +190,10 @@ func LetterPacks(pointedWord string) []LetterPack {
 	return letters
 }
 
+func Prettify(pointedWord string) string {
+	return LetterPacksToString(LetterPacks(pointedWord))
+}
+
 func LetterPacksToString(ls []LetterPack) string {
 	var b strings.Builder
 	for _, l := range ls {
