@@ -207,13 +207,19 @@ func (w Word) Quizzable() bool {
 }
 
 func (l LetterPack) String() string {
+	shadda := ""
+	superscript := ""
+	vowel := string(l.Vowel)
 	if l.Shadda {
-		return fmt.Sprintf("%c%c%c", l.Letter, l.Vowel, Shadda)
+		shadda = string(Shadda)
+	}
+	if l.SuperscriptAlef {
+		superscript = string(SuperscriptAlef)
 	}
 	if l.Vowel == Sukoon && l.Letter != Yeh && l.Letter != Waw {
-		return fmt.Sprintf("%c", l.Letter)
+		vowel = ""
 	}
-	return fmt.Sprintf("%c%c", l.Letter, l.Vowel)
+	return fmt.Sprintf("%c%s%s%s", l.Letter, vowel, shadda, superscript)
 }
 
 func (l LetterPack) Unpointed(showShadda bool) string {
