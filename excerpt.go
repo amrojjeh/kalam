@@ -206,6 +206,9 @@ func (l LetterPack) String() string {
 	if l.Shadda {
 		return fmt.Sprintf("%c%c%c", l.Letter, l.Vowel, Shadda)
 	}
+	if l.Vowel == Sukoon && l.Letter != Yeh && l.Letter != Waw {
+		return fmt.Sprintf("%c", l.Letter)
+	}
 	return fmt.Sprintf("%c%c", l.Letter, l.Vowel)
 }
 
