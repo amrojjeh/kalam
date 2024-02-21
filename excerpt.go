@@ -190,6 +190,14 @@ func LetterPacks(pointedWord string) []LetterPack {
 	return letters
 }
 
+func LetterPacksToString(ls []LetterPack) string {
+	var b strings.Builder
+	for _, l := range ls {
+		b.WriteString(l.String())
+	}
+	return b.String()
+}
+
 func (w Word) Quizzable() bool {
 	return !w.Punctuation && !w.Ignore
 }
