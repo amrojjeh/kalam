@@ -5,54 +5,86 @@ import (
 	"strings"
 )
 
-var GrammaticalTags = []string{
-	"اسم مرفوع",
-	"اسم منصوب",
-	"اسم مجرور",
+type declention struct {
+	Declention string
+	Functions  []string
+}
 
-	" فعل مرفوع",
-	"فعل منصوب",
-	"فعل مجزوم",
+var Declention = []declention{
+	{
+		Declention: FromBuckwalter("Asm mrfwE"),
+		Functions: []string{
+			FromBuckwalter("mbtd>"),
+			FromBuckwalter("xbr"),
+			FromBuckwalter("fAEl nA}b"),
+			FromBuckwalter("fAEl"),
+			FromBuckwalter("Asm kAn w>xwAthA"),
+			FromBuckwalter("Asm <n w>xwAthA"),
+		},
+	},
+	{
+		Declention: FromBuckwalter("Asm mnSwb"),
+		Functions: []string{
+			FromBuckwalter("mfEwl bh"),
+			FromBuckwalter("mfEwl bh vAn"),
+			FromBuckwalter("mfEwl bh vAlv"),
+			FromBuckwalter("mfEwl fyh"),
+			FromBuckwalter("mfEwl mTlq"),
+			FromBuckwalter("mfEwl l>jlh"),
+			FromBuckwalter("mfEwl mEh"),
+			FromBuckwalter("HAl"),
+			FromBuckwalter("tmyyz"),
+			FromBuckwalter("mstvnY"),
+			FromBuckwalter("HSr"),
+			FromBuckwalter("mnAdY"),
+			FromBuckwalter("Asm wxbr Zn w>xwAthA"),
+			FromBuckwalter("Asm wxbr Hrf nfy"),
+			FromBuckwalter("Asm <n w>xwAthA"),
+			FromBuckwalter("xbr kAn w>xwAthA"),
+		},
+	},
+	{
+		Declention: FromBuckwalter("Asm mjrwr"),
+		Functions: []string{
+			FromBuckwalter("Asm bEd Hrf jr"),
+			FromBuckwalter("mDAf <lyh"),
+		},
+	},
 
-	"مبني",
-	"توابع",
+	{
+		Declention: FromBuckwalter("fEl mrfwE"),
+		Functions: []string{
+			FromBuckwalter("mDArE mrfwE"),
+		},
+	},
+	{
+		Declention: FromBuckwalter("fEl mnSwb"),
+		Functions: []string{
+			FromBuckwalter("mDArE mnSwb bHrf AlnSb"),
+		},
+	},
+	{
+		Declention: FromBuckwalter("fEl mjzwm"),
+		Functions: []string{
+			FromBuckwalter("mDArE mjzwm bHrf Aljzm"),
+			FromBuckwalter("mDArE mjzwm b>dAp Al$rT AljAzm"),
+		},
+	},
 
-	"مضارع مرفوع",
-	"مضارع منصوب بحرف النصب",
-	"مضارع مجزوم بحرف الجزم",
-	"مضارع مجزوم بأداة الشرط الجازم",
-
-	"مبتدأ",
-	"خبر",
-	"فاعل نائب",
-	"فاعل",
-	"اسم كان وأخواتها",
-	"خبر إن وأخواتها",
-
-	"مفعول به",
-	"مفعول به ثان",
-	"مفعول به ثالث",
-	"مفعول فيه",
-	"مفعول مطلق",
-	"مفعول لأجله",
-	"مفعول معه",
-	"حال",
-	"تمييز",
-	"مستثنى",
-	"حصر",
-	"منادى",
-	" اسم وخبر ظن وأخواتها",
-	"اسم وخبر حرف نفي",
-	"اسم إن وأخواتها",
-	" خبر كان واخواتها",
-
-	"مضاف إليه",
-	"اسم بعد حرف جر",
-
-	"نعت",
-	"اسم معطوف",
-	"توكيد",
-	"بدل",
+	{
+		// TODO(Amr Ojjeh): Add functions
+		Declention: FromBuckwalter("mbny"),
+		Functions:  []string{},
+	},
+	{
+		Declention: FromBuckwalter("tAbE"),
+		Functions: []string{
+			FromBuckwalter("nEt"),
+			FromBuckwalter("Asm mETwf"),
+			FromBuckwalter("twkyd"),
+			FromBuckwalter("bdl"),
+		},
+	},
 }
 
 // IsWhitespace is preferred over unicode.IsSpace since we have our own whitespace rules
