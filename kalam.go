@@ -155,7 +155,20 @@ func IsContentClean(content string) bool {
 func FromBuckwalter(sen string) string {
 	res := ""
 	for _, l := range sen {
-		b, ok := buckwalter[l]
+		b, ok := toBuckwalter[l]
+		if ok {
+			res += string(b)
+		} else {
+			res += string(l)
+		}
+	}
+	return res
+}
+
+func ToBuckwalter(sen string) string {
+	res := ""
+	for _, l := range sen {
+		b, ok := fromBuckwalter[l]
 		if ok {
 			res += string(b)
 		} else {

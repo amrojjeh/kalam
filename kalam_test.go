@@ -78,7 +78,11 @@ func TestIsContentClean(t *testing.T) {
 	}
 }
 
-func TestBuckWalter(t *testing.T) {
+func TestFromBuckWalter(t *testing.T) {
 	assert.Equal(t, FromBuckwalter("h*A byt."), fmt.Sprintf("%c%c%c %c%c%c.",
 		Heh, Thal, Alef, Beh, Yeh, Teh))
+}
+
+func TestToBuckWalter(t *testing.T) {
+	assert.Equal(t, ToBuckwalter(FromBuckwalter("h*A byt.")), "h*A byt.")
 }
