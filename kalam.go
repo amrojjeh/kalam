@@ -5,85 +5,69 @@ import (
 	"strings"
 )
 
-type declention struct {
-	Declention string
-	Functions  []string
+var Cases = []string{
+	FromBuckwalter("Asm mrfwE"),
+	FromBuckwalter("Asm mnSwb"),
+	FromBuckwalter("Asm mjrwr"),
+	FromBuckwalter("fEl mrfwE"),
+	FromBuckwalter("fEl mnSwb"),
+	FromBuckwalter("fEl mjzwm"),
+	FromBuckwalter("mbny"),
+	FromBuckwalter("tAbE"),
 }
 
-var Declention = []declention{
-	{
-		Declention: FromBuckwalter("Asm mrfwE"),
-		Functions: []string{
-			FromBuckwalter("mbtd>"),
-			FromBuckwalter("xbr"),
-			FromBuckwalter("fAEl nA}b"),
-			FromBuckwalter("fAEl"),
-			FromBuckwalter("Asm kAn w>xwAthA"),
-			FromBuckwalter("Asm <n w>xwAthA"),
-		},
+var Declention = map[string][]string{
+	Cases[0]: {
+		FromBuckwalter("mbtd>"),
+		FromBuckwalter("xbr"),
+		FromBuckwalter("fAEl nA}b"),
+		FromBuckwalter("fAEl"),
+		FromBuckwalter("Asm kAn w>xwAthA"),
+		FromBuckwalter("Asm <n w>xwAthA"),
 	},
-	{
-		Declention: FromBuckwalter("Asm mnSwb"),
-		Functions: []string{
-			FromBuckwalter("mfEwl bh"),
-			FromBuckwalter("mfEwl bh vAn"),
-			FromBuckwalter("mfEwl bh vAlv"),
-			FromBuckwalter("mfEwl fyh"),
-			FromBuckwalter("mfEwl mTlq"),
-			FromBuckwalter("mfEwl l>jlh"),
-			FromBuckwalter("mfEwl mEh"),
-			FromBuckwalter("HAl"),
-			FromBuckwalter("tmyyz"),
-			FromBuckwalter("mstvnY"),
-			FromBuckwalter("HSr"),
-			FromBuckwalter("mnAdY"),
-			FromBuckwalter("Asm wxbr Zn w>xwAthA"),
-			FromBuckwalter("Asm wxbr Hrf nfy"),
-			FromBuckwalter("Asm <n w>xwAthA"),
-			FromBuckwalter("xbr kAn w>xwAthA"),
-		},
+	Cases[1]: {
+		FromBuckwalter("mfEwl bh"),
+		FromBuckwalter("mfEwl bh vAn"),
+		FromBuckwalter("mfEwl bh vAlv"),
+		FromBuckwalter("mfEwl fyh"),
+		FromBuckwalter("mfEwl mTlq"),
+		FromBuckwalter("mfEwl l>jlh"),
+		FromBuckwalter("mfEwl mEh"),
+		FromBuckwalter("HAl"),
+		FromBuckwalter("tmyyz"),
+		FromBuckwalter("mstvnY"),
+		FromBuckwalter("HSr"),
+		FromBuckwalter("mnAdY"),
+		FromBuckwalter("Asm wxbr Zn w>xwAthA"),
+		FromBuckwalter("Asm wxbr Hrf nfy"),
+		FromBuckwalter("Asm <n w>xwAthA"),
+		FromBuckwalter("xbr kAn w>xwAthA"),
 	},
-	{
-		Declention: FromBuckwalter("Asm mjrwr"),
-		Functions: []string{
-			FromBuckwalter("Asm bEd Hrf jr"),
-			FromBuckwalter("mDAf <lyh"),
-		},
+	Cases[2]: {
+		FromBuckwalter("Asm bEd Hrf jr"),
+		FromBuckwalter("mDAf <lyh"),
 	},
 
-	{
-		Declention: FromBuckwalter("fEl mrfwE"),
-		Functions: []string{
-			FromBuckwalter("mDArE mrfwE"),
-		},
+	Cases[3]: {
+		FromBuckwalter("mDArE mrfwE"),
 	},
-	{
-		Declention: FromBuckwalter("fEl mnSwb"),
-		Functions: []string{
-			FromBuckwalter("mDArE mnSwb bHrf AlnSb"),
-		},
-	},
-	{
-		Declention: FromBuckwalter("fEl mjzwm"),
-		Functions: []string{
-			FromBuckwalter("mDArE mjzwm bHrf Aljzm"),
-			FromBuckwalter("mDArE mjzwm b>dAp Al$rT AljAzm"),
-		},
+	Cases[4]: {
+		FromBuckwalter("mDArE mnSwb bHrf AlnSb"),
 	},
 
-	{
-		// TODO(Amr Ojjeh): Add functions
-		Declention: FromBuckwalter("mbny"),
-		Functions:  []string{},
+	Cases[5]: {
+		FromBuckwalter("mDArE mjzwm bHrf Aljzm"),
+		FromBuckwalter("mDArE mjzwm b>dAp Al$rT AljAzm"),
 	},
-	{
-		Declention: FromBuckwalter("tAbE"),
-		Functions: []string{
-			FromBuckwalter("nEt"),
-			FromBuckwalter("Asm mETwf"),
-			FromBuckwalter("twkyd"),
-			FromBuckwalter("bdl"),
-		},
+
+	// TODO(Amr Ojjeh): Add functions
+	Cases[6]: {},
+
+	Cases[7]: {
+		FromBuckwalter("nEt"),
+		FromBuckwalter("Asm mETwf"),
+		FromBuckwalter("twkyd"),
+		FromBuckwalter("bdl"),
 	},
 }
 
