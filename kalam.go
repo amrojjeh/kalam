@@ -16,7 +16,7 @@ var Cases = []string{
 	FromBuckwalter("tAbE"),
 }
 
-var Declention = map[string][]string{
+var States = map[string][]string{
 	Cases[0]: {
 		FromBuckwalter("mbtd>"),
 		FromBuckwalter("xbr"),
