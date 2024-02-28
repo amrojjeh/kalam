@@ -48,14 +48,6 @@ func (e Excerpt) String() string {
 	return RemoveExtraWhitespace(res)
 }
 
-func (e Excerpt) Unpointed(showShadda bool) string {
-	res := ""
-	for _, s := range e.Sentences {
-		res += s.Unpointed(showShadda) + " "
-	}
-	return RemoveExtraWhitespace(res)
-}
-
 // Iterator returns an ExcerptIterator which points to the first quizzable word
 func (e Excerpt) Iterator() (ExcerptIterator, bool) {
 	i := ExcerptIterator{Excerpt: e}
@@ -79,26 +71,15 @@ func (s Sentence) String() string {
 	return strings.TrimSpace(res)
 }
 
-func (s Sentence) Unpointed(showShadda bool) string {
-	res := ""
-	for _, w := range s.Words {
-		res += w.Unpointed(showShadda)
-		if !w.Preceding {
-			res += " "
-		}
-	}
-	return res
-}
-
 func (w Word) String() string {
 	return w.PointedWord
 }
 
 // UnpointedString returns the word without any vowels. The shadda is shown
 // if showShadda is true.
-func (w Word) Unpointed(showShadda bool) string {
+func Unpointed(pointedWord string, showShadda bool) string {
 	res := ""
-	for _, l := range w.PointedWord {
+	for _, l := range pointedWord {
 		c := string(l)
 		if !IsShortVowel(l) {
 			if (showShadda && l == Shadda) || l != Shadda {
