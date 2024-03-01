@@ -125,9 +125,6 @@ func (l LetterPack) String() string {
 	if l.SuperscriptAlef {
 		superscript = string(SuperscriptAlef)
 	}
-	if l.Vowel == Sukoon && l.Letter != Yeh && l.Letter != Waw {
-		vowel = ""
-	}
 	return fmt.Sprintf("%c%s%s%s", l.Letter, vowel, shadda, superscript)
 }
 
