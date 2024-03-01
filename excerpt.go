@@ -5,74 +5,11 @@ import (
 	"strings"
 )
 
-type Excerpt struct {
-	Name      string
-	Sentences []Sentence
-}
-
-type Sentence struct {
-	Words []Word
-}
-
-type Word struct {
-	PointedWord string
-	Tags        []string
-	Punctuation bool
-
-	Ignore bool
-
-	// Preceding is true if it preceeds another word or punctuation without
-	// any space.
-	Preceding bool
-}
-
 type LetterPack struct {
 	Letter          rune
 	Vowel           rune
 	Shadda          bool
 	SuperscriptAlef bool
-}
-
-type ExcerptIterator struct {
-	Excerpt   Excerpt
-	SentenceI int
-	WordI     int
-	Index     int
-}
-
-func (e Excerpt) String() string {
-	res := ""
-	for _, s := range e.Sentences {
-		res += s.String() + " "
-	}
-	return RemoveExtraWhitespace(res)
-}
-
-// Iterator returns an ExcerptIterator which points to the first quizzable word
-func (e Excerpt) Iterator() (ExcerptIterator, bool) {
-	i := ExcerptIterator{Excerpt: e}
-	if i.Word().Quizzable() {
-		return i, true
-	} else {
-		i, f := i.Next()
-		i.Index = 0
-		return i, f
-	}
-}
-
-func (s Sentence) String() string {
-	res := ""
-	for _, w := range s.Words {
-		res += w.String()
-		if !w.Preceding {
-			res += " "
-		}
-	}
-	return strings.TrimSpace(res)
-}
-
-func (w Word) String() string {
-	return w.PointedWord
 }
 
 // UnpointedString returns the word without any vowels. The shadda is shown
@@ -91,24 +28,23 @@ func Unpointed(pointedWord string, showShadda bool) string {
 }
 
 // Base returns a new word which does not have the last letter of w
-func (w Word) Base() Word {
+func Base(word string) string {
 	res := ""
-	letters := LetterPacks(w.PointedWord)
+	letters := LetterPacks(word)
 	for _, l := range letters[0 : len(letters)-1] {
 		res += l.String()
 	}
-	w.PointedWord = res
-	return w
+	return res
 }
 
 // Termination returns the last letter of w
-func (w Word) Termination() LetterPack {
-	letters := LetterPacks(w.PointedWord)
+func Termination(word string) LetterPack {
+	letters := LetterPacks(word)
 	return letters[len(letters)-1]
 }
 
 // IsValid checks if every Arabic letter in pointedWord has a vowel, and that each letter
-// only has one vowel and only one optional shadda
+// only has one optional vowel and one optional shadda
 // IsValid makes a call to IsContentClean
 func IsValid(pointedWord string) bool {
 	l := false
@@ -132,9 +68,6 @@ func IsValid(pointedWord string) bool {
 			}
 			v = true
 		} else {
-			if l == true && v == false {
-				return false
-			}
 			l = true
 			v = false
 			s = false
@@ -148,7 +81,7 @@ func IsValid(pointedWord string) bool {
 func LetterPacks(pointedWord string) []LetterPack {
 	letters := []LetterPack{}
 	letter := LetterPack{
-		Vowel: Sukoon,
+		Vowel: 0,
 	}
 	for _, l := range pointedWord {
 		if l == Shadda {
@@ -171,10 +104,6 @@ func LetterPacks(pointedWord string) []LetterPack {
 	return letters
 }
 
-func Prettify(pointedWord string) string {
-	return LetterPacksToString(LetterPacks(pointedWord))
-}
-
 func LetterPacksToString(ls []LetterPack) string {
 	var b strings.Builder
 	for _, l := range ls {
@@ -183,14 +112,13 @@ func LetterPacksToString(ls []LetterPack) string {
 	return b.String()
 }
 
-func (w Word) Quizzable() bool {
-	return !w.Punctuation && !w.Ignore
-}
-
 func (l LetterPack) String() string {
 	shadda := ""
 	superscript := ""
-	vowel := string(l.Vowel)
+	vowel := ""
+	if l.Vowel != 0 {
+		vowel = string(l.Vowel)
+	}
 	if l.Shadda {
 		shadda = string(Shadda)
 	}
@@ -228,51 +156,4 @@ func LetterPackFromString(str string) LetterPack {
 
 func (l LetterPack) EqualTo(o LetterPack) bool {
 	return l.Shadda == o.Shadda && l.Letter == o.Letter && l.Vowel == o.Vowel
-}
-
-// Next returns the next quizzable word. If there are no more words, it returns true
-func (i ExcerptIterator) Next() (ExcerptIterator, bool) {
-	i, found := i.nextWord()
-	if found {
-		return i, true
-	}
-
-	for i.SentenceI < len(i.Excerpt.Sentences)-1 {
-		i.SentenceI += 1
-		i.WordI = 0
-		if i.Word().Quizzable() {
-			i.Index += 1
-			return i, true
-		}
-		i, found = i.nextWord()
-		if found {
-			return i, true
-		}
-	}
-	return i, false
-}
-
-func (i ExcerptIterator) nextWord() (ExcerptIterator, bool) {
-	for wi, w := range i.Sentence().Words[i.WordI:] {
-		if wi == 0 {
-			continue
-		}
-		if w.Quizzable() {
-			return ExcerptIterator{
-				Excerpt:   i.Excerpt,
-				SentenceI: i.SentenceI,
-				WordI:     i.WordI + wi,
-				Index:     i.Index + 1,
-			}, true
-		}
-	}
-	return i, false
-}
-
-func (i ExcerptIterator) Sentence() Sentence {
-	return i.Excerpt.Sentences[i.SentenceI]
-}
-
-func (i ExcerptIterator) Word() Word {
-	return i.Sentence().Words[i.WordI]
 }

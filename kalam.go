@@ -2,7 +2,6 @@ package kalam
 
 import (
 	"regexp"
-	"strings"
 )
 
 var Cases = []string{
@@ -112,17 +111,6 @@ func IsTanween(letter rune) bool {
 // IsShadda checks if the character is a shadda.
 func IsShadda(letter rune) bool {
 	return letter == Shadda
-}
-
-// RemoveExtraWhitespace removes unnecessary whitespace, ensuring that there
-// are no double spaces and no beginning/ending whitespace.
-func RemoveExtraWhitespace(content string) string {
-	// Remove double spaces
-	r, _ := regexp.Compile(" +")
-	content = r.ReplaceAllString(content, " ")
-
-	content = strings.TrimSpace(content)
-	return content
 }
 
 // IsContentClean ensures that all characters conform to Kalam's character
